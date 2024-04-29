@@ -76,7 +76,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
           />
           News & Insights
         </Button>
-        <Button
+        {/* <Button
           onClick={() => setClickedIcon('HistoricalAnalysis')}
           style={{
             color: 'black',
@@ -97,7 +97,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
             }}
           />
           Historical Analysis
-        </Button>
+        </Button> */}
       </Box>
       <Box sx={{ paddingLeft: '20px', paddingTop: '80px' }}>
         <Button
