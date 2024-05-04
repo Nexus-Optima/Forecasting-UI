@@ -11,24 +11,25 @@ import Header from "../Utils/Header";
 import Sidebar from "../Utils/Sidebar";
 import { useRef } from "react";
 import { ColorType, createChart } from "lightweight-charts";
-import NewsInsight from "./NewsInsight";
-import HistoricalAnalysis from "./HistoricalAnalysis";
+import Insight from "./Insight";
+import { useCommodity } from "../Context/forecastContext";
 
 const Overview = () => {
-  const [clickedIcon, setClickedIcon] = useState("overview");
-  const [selectCommodity, setSelectCommodity] = useState("cotton");
-  // const [initialData, setInitialData]=useState([]);
+  const [clickedIcon, setClickedIcon] = useState("Overview");
+  const {selectedCommodity,setSelectedCommodity}= useCommodity();
+
+  // const [selectCommodity, setSelectCommodity] = useState("cotton");
+  let chartContainerRef = useRef(null);
+  let chartRef = useRef(null);
 
   const handleCommodityChange = (e) => {
-    setSelectCommodity(e.target.value);
+    setSelectedCommodity(e.target.value);
   };
 
   const renderContent = () => {
     switch (clickedIcon) {
-      case "NewsInsight":
-        return <NewsInsight />;
-      case "HistoricalAnalysis":
-        return <HistoricalAnalysis />;
+        case "Insight":
+          return <Insight/>
       default:
         return (
           <Grid container spacing={2}>
@@ -105,20 +106,65 @@ const Overview = () => {
         );
     }
   };
-  const chartContainerRef = useRef();
 
-  useEffect(() => {    
+  useEffect(() => {
     const forecastdata = async () => {
+      if (chartRef.current) {
+        chartRef.current.remove();
+        chartRef = null;
+      }
       try {
         const response = await fetch(
-          // `${process.env.REACT_FORECAST_URL}/${selectCommodity}`
-          `http://127.0.0.1:5000/get-forecast/${selectCommodity}`
-          // "http://127.0.0.1:5000/get-forecast/cotton"
+          `http://127.0.0.1:5000/get-forecast/${selectedCommodity}`
         );
-        const userdata =await response.json();
-        console.log(userdata);
+        const { actual, forecast } = await response.json();
 
-        const intialdata=userdata
+         // Calculate the lengths of actual and forecast arrays
+      const actualLength = actual.length;
+      const forecastLength = forecast.length;
+
+      
+      const startSliceIndex = Math.max(0, actualLength - forecastLength);
+      const slicedActual = actual.slice(startSliceIndex);
+      const maxActualEntries = Math.min(140 - Math.max(120, forecastLength), slicedActual.length);
+      const trimmedActual = slicedActual.slice(-maxActualEntries);
+      const chartData = [];
+
+       trimmedActual.forEach(entry => {
+         chartData.push({
+           time: entry.Date,
+           value: parseFloat(entry['Actual Values']) 
+         });
+       });
+ 
+   
+       forecast.forEach(entry => {
+         chartData.push({
+           time: entry.Date,
+           value: parseFloat(entry['Forecast Values']) 
+         });
+       });
+ 
+       if (chartData.length > 140) {
+         chartData.splice(0, chartData.length - 140);
+       }
+ 
+
+        // const limited_data = actual.slice(-(80-forecast.length));
+        // console.log(limited_data);
+
+        // const chartData = limited_data.map((entry) => ({
+        //   time: entry.Date,
+        //   value: parseFloat(entry["Actual Values"]),
+        // }));
+
+        // forecast.forEach((entry1) => {
+        //   chartData.push({
+        //     time: entry1.Date,
+        //     value: parseFloat(entry1["Forecast Values"]),
+        //   });
+        // });
+
         const chart = createChart(chartContainerRef.current, {
           layout: {
             margin: "13%",
@@ -127,106 +173,28 @@ const Overview = () => {
           width: 1200,
           height: 410,
         });
-    
+
         const newSeries = chart.addLineSeries({
           color: "black",
         });
-    
-        newSeries.setData(intialdata);
-        return () => {
-          chart.remove();
-        };
+        newSeries.setData(chartData);
+        chartRef.current = chart;
         
-      } catch (error){
+      } catch (error) {
         console.log("Error in fetching data");
       }
     };
+
     forecastdata();
-  },[selectCommodity]);
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.remove();
+        chartRef.current = null;
+      }
+    };
+  }, [selectedCommodity]);
 
-
-  // useEffect(() => {
-    // const initialData = [
-    //   { time: "2018-12-22", values: 32.51 },
-    //   { time: "2018-12-23", value: 31.11 },
-    //   { time: "2018-12-24", value: 27.02 },
-    //   { time: "2018-12-25", value: 27.32 },
-    //   { time: "2018-12-26", value: 25.17 },
-    //   { time: "2018-12-27", value: 28.89 },
-    //   { time: "2018-12-28", value: 25.46 },
-    //   { time: "2018-12-29", value: 23.92 },
-    //   { time: "2018-12-30", value: 22.68 },
-    //   { time: "2018-12-31", value: 22.67 },
-    //   { time: "2019-12-22", value: 32.51 },
-    //   { time: "2019-12-23", value: 31.11 },
-    //   { time: "2019-12-24", value: 27.02 },
-    //   { time: "2019-12-25", value: 27.32 },
-    //   { time: "2019-12-26", value: 25.17 },
-    //   { time: "2019-12-27", value: 28.89 },
-    //   { time: "2019-12-28", value: 25.46 },
-    //   { time: "2019-12-29", value: 23.92 },
-    //   { time: "2019-12-30", value: 22.68 },
-    //   { time: "2019-12-31", value: 22.67 },
-    //   { time: "2020-12-22", value: 32.51 },
-    //   { time: "2020-12-23", value: 31.11 },
-    //   { time: "2020-12-24", value: 27.02 },
-    //   { time: "2020-12-25", value: 27.32 },
-    //   { time: "2020-12-26", value: 25.17 },
-    //   { time: "2020-12-27", value: 28.89 },
-    //   { time: "2020-12-28", value: 25.46 },
-    //   { time: "2020-12-29", value: 23.92 },
-    //   { time: "2020-12-30", value: 22.68 },
-    //   { time: "2020-12-31", value: 22.67 },
-    //   { time: "2021-12-02", value: 32.51 },
-    //   { time: "2021-12-03", value: 31.11 },
-    //   { time: "2021-12-04", value: 27.02 },
-    //   { time: "2021-12-05", value: 27.32 },
-    //   { time: "2021-12-06", value: 25.17 },
-    //   { time: "2021-12-07", value: 28.89 },
-    //   { time: "2021-12-08", value: 25.46 },
-    //   { time: "2021-12-09", value: 23.92 },
-    //   { time: "2021-12-10", value: 22.68 },
-    //   { time: "2021-12-11", value: 22.67 },
-    //   { time: "2021-12-12", value: 32.51 },
-    //   { time: "2021-12-13", value: 31.11 },
-    //   { time: "2021-12-14", value: 27.02 },
-    //   { time: "2021-12-15", value: 27.32 },
-    //   { time: "2021-12-16", value: 25.17 },
-    //   { time: "2021-12-17", value: 28.89 },
-    //   { time: "2021-12-18", value: 25.46 },
-    //   { time: "2021-12-19", value: 23.92 },
-    //   { time: "2021-12-20", value: 22.68 },
-    //   { time: "2021-12-21", value: 22.67 },
-    //   { time: "2021-12-22", value: 32.51 },
-    //   { time: "2021-12-23", value: 31.11 },
-    //   { time: "2021-12-24", value: 27.02 },
-    //   { time: "2021-12-25", value: 27.32 },
-    //   { time: "2021-12-26", value: 25.17 },
-    //   { time: "2021-12-27", value: 28.89 },
-    //   { time: "2021-12-28", value: 25.46 },
-    //   { time: "2021-12-29", value: 23.92 },
-    //   { time: "2021-12-30", value: 22.68 },
-    //   { time: "2021-12-31", value: 22.67 },
-    // ];
-
-  //   const chart = createChart(chartContainerRef.current, {
-  //     layout: {
-  //       margin: "13%",
-  //       background: { type: ColorType.Solid, color: "white" },
-  //     },
-  //     width: 1200,
-  //     height: 410,
-  //   });
-
-  //   const newSeries = chart.addLineSeries({
-  //     color: "black",
-  //   });
-
-  //   newSeries.setData(initialData);
-  //   return () => {
-  //     chart.remove();
-  //   };
-  // }, [selectCommodity]);
+  
 
   return (
     <>
@@ -249,7 +217,7 @@ const Overview = () => {
         <Select
           labelId="commodity-label"
           id="commodity"
-          value={selectCommodity}
+          value={selectedCommodity}
           onChange={handleCommodityChange}
         >
           <MenuItem value="">None</MenuItem>
