@@ -54,8 +54,9 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
           />
           Overview
         </Button>
+        
         <Button
-          onClick={() => setClickedIcon('NewsInsight')}
+          onClick={() => setClickedIcon('Insight')}
           style={{
             color: 'black',
             display: 'flex',
@@ -66,7 +67,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
             textTransform: 'none',
             fontSize: '15px',
             backgroundColor: 'transparent',
-            border: clickedIcon === 'NewsInsight' ? '2px solid black' : 'none',
+            border: clickedIcon === 'Insight' ? '2px solid black' : 'none',
           }}
         >
           <ContentPasteSearchIcon
@@ -74,7 +75,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
               fontSize: '40px',
             }}
           />
-          News & Insights
+          Insights
         </Button>
         {/* <Button
           onClick={() => setClickedIcon('HistoricalAnalysis')}

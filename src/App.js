@@ -4,14 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import Overview from './Components/Overview';
-import Header from './Utils/Header';
-import Sidebar from './Utils/Sidebar';
-import HistoricalAnalysis from './Components/HistoricalAnalysis';
-import NewsInsight from './Components/NewsInsight';
+import { CommodityProvider } from './Context/forecastContext';
 
 
 function App() {
   return (
+    <CommodityProvider>
     <Router>
       <div className="App">
         <Routes>
@@ -19,6 +17,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </CommodityProvider>
   );
 }
 
