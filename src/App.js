@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-import Overview from './Components/Overview';
+import Home from './Dashboard/Home';
 import { CommodityProvider } from './Context/forecastContext';
 
 
@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Overview/>}/>
+          <Route path="/" element={<Home/>}/>
         </Routes>
       </div>
     </Router>
