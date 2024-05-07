@@ -19,13 +19,12 @@ const ChartComponent = () => {
         const response = await fetch(`${apiUrl}/get-forecast/${selectedCommodity}`);
         const { actual, forecast } = await response.json();
 
-        // Initialize the chart with padding adjustments
         const chart = createChart(chartContainerRef.current, {
           layout: {
             background: { type: ColorType.Solid, color: "white" },
           },
-          width: chartContainerRef.current.clientWidth * 0.95, // Slightly less width to accommodate padding
-          height: chartContainerRef.current.clientHeight * 0.95, // Slightly less height to accommodate padding
+          width: chartContainerRef.current.clientWidth * 0.95, 
+          height: chartContainerRef.current.clientHeight * 0.95,
         });
 
         const actualSeries = chart.addLineSeries({
