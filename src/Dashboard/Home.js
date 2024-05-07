@@ -16,6 +16,7 @@ import { useCommodity } from "../Context/forecastContext";
 const Home = () => {
   const [clickedIcon, setClickedIcon] = useState("Overview");
   const { selectedCommodity, setSelectedCommodity } = useCommodity();
+  const [forecastingCommodities, setForecastingCommodities] = useState([]);
   const [error, setError] = useState(null);
   const [unauthorized, setUnauthorized] = useState(null);
   const [mainDomain, setMainDomain] = useState(null);
@@ -31,16 +32,23 @@ const Home = () => {
       const fetchData = async () => {
         try {
           const params = new URLSearchParams(window.location.search);
-          const username = params.get("username");
-          console.log(username);
+          const email = params.get("email");
           const response = await fetch(
-            `${process.env.REACT_APP_URL}?client_name=${username}`
+            `${process.env.REACT_APP_URL}?userId=${email}`
           );
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const data = await response.json();
-          console.log(data);
+          const extractedCommodities = [];
+          for (const key in data) {
+            if (data[key].moduleName.includes("forecasting")) {
+              const commodity = key.split("#").pop();
+              extractedCommodities.push(commodity);
+            }
+          }
+          setForecastingCommodities(extractedCommodities);
         } catch (error) {
           setError("Error fetching data. Please try again later.");
         }
@@ -103,9 +111,11 @@ const Home = () => {
               onChange={handleCommodityChange}
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="cotton">Cotton</MenuItem>
-              <MenuItem value="banana">Banana</MenuItem>
-              <MenuItem value="orange">Orange</MenuItem>
+              {forecastingCommodities.map((commodity, index) => (
+                <MenuItem key={index} value={commodity}>
+                  {commodity}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {error ? (
