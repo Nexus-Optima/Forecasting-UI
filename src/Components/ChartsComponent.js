@@ -14,6 +14,7 @@ const ChartComponent = () => {
         chartRef.current.remove();
         chartRef.current = null;
       }
+      chartContainerRef.current.innerHTML = '';
       try {
         const apiUrl = process.env.REACT_APP_BACKEND;
         const response = await fetch(`${apiUrl}/get-forecast/${selectedCommodity}`);
