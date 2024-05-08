@@ -110,7 +110,6 @@ const Home = () => {
               value={selectedCommodity}
               onChange={handleCommodityChange}
             >
-              <MenuItem value="">None</MenuItem>
               {forecastingCommodities.map((commodity, index) => (
                 <MenuItem key={index} value={commodity}>
                   {commodity}
