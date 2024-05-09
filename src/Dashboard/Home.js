@@ -37,7 +37,6 @@ const Home = () => {
             `${process.env.REACT_APP_URL}?userId=${email}`
           );
 
-
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -111,11 +110,6 @@ const Home = () => {
               value={selectedCommodity}
               onChange={handleCommodityChange}
             >
-              {forecastingCommodities.map((commodity, index) => (
-                <MenuItem key={index} value={commodity}>
-                  {commodity}
-                </MenuItem>
-              ))}
               {forecastingCommodities.map((commodity, index) => (
                 <MenuItem key={index} value={commodity}>
                   {commodity}
