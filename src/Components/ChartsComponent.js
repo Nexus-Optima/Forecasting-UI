@@ -203,7 +203,7 @@ const ChartComponent = () => {
           <Typography
             sx={{
               padding:'15px',
-              color: "black",
+              color: "green",
               fontSize: "24px",
               marginBottom: "10px",
               fontWeight: "bold",
@@ -213,21 +213,21 @@ const ChartComponent = () => {
             Forecasting Summary
           </Typography>
           <Typography
-            sx={{ color: "black", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
+            sx={{ color: "green", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
           >
             {maxPrice ? `Max Price: ${maxPrice}` : 'Max Price : No data available'}
           </Typography>
           <Typography
-            sx={{ color: "black", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
+            sx={{ color: "green", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
           >
             {minPrice ? `Min Price: ${minPrice}` : 'Min Price : No data available'}
           </Typography>
           <Typography
-            sx={{ color: "black", fontSize: "18px", marginBottom: "10px", marginRight:'20px', fontStyle:'italic' }}
+            sx={{ color: "green", fontSize: "18px", marginBottom: "10px", marginRight:'20px', fontStyle:'italic' }}
           >
             {startDate && endDate ? `Date Range: ${startDate} - ${endDate}` : 'Date Range : No data available'}
           </Typography>
-          <Typography sx={{ color: "black", fontSize: "18px" , marginRight:'20px', fontStyle:'italic'}}>
+          <Typography sx={{ color: "green", fontSize: "18px" , marginRight:'20px', fontStyle:'italic'}}>
             {avgPrice ? `Avg Price: ${avgPrice}` : 'Avg Price : No data available'}
           </Typography>
         </Box>
