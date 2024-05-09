@@ -59,7 +59,6 @@ const Insight = () => {
         <Table
           style={{
             tableLayout: "fixed",
-            width: "100%",
             fontWeight: "bold",
             textAlign: "left",
             backgroundColor: "#F0F0F0",
