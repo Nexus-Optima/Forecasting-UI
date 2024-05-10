@@ -71,7 +71,7 @@ const Home = () => {
 
   return (
     <>
-      {unauthorized ? (
+      {/* {unauthorized ? (
         <>
           <Typography variant="h5" color="error" style={{ paddingTop: "5%" }}>
             {unauthorized}
@@ -89,7 +89,7 @@ const Home = () => {
             Go back to dashboard
           </Button>
         </>
-      ) : (
+      ) : ( */}
         <>
           <Header />
           <Sidebar clickedIcon={clickedIcon} setClickedIcon={setClickedIcon} />
@@ -110,16 +110,7 @@ const Home = () => {
               value={selectedCommodity}
               onChange={handleCommodityChange}
             >
-              {forecastingCommodities.map((commodity, index) => (
-                <MenuItem key={index} value={commodity}>
-                  {commodity}
-                </MenuItem>
-              ))}
-              {forecastingCommodities.map((commodity, index) => (
-                <MenuItem key={index} value={commodity}>
-                  {commodity}
-                </MenuItem>
-              ))}
+              <MenuItem value="cotton">Cotton</MenuItem>
             </Select>
           </FormControl>
           {error ? (
@@ -130,7 +121,7 @@ const Home = () => {
             renderContent()
           )}
         </>
-      )}
+      {/* )} */}
     </>
   );
 };
