@@ -48,7 +48,7 @@ const Home = () => {
       const decryptedData = decryptData(encryptedData.toString(), secretKey,setError);
       const clientEmail = decryptedData.email;
       const fetchUrl = `${
-        process.env.REACT_APP_URL
+        process.env.REACT_APP_BACKEND_ENGINE
       }?userId=${encodeURIComponent(clientEmail)}`;
 
       const fetchData = async () => {
