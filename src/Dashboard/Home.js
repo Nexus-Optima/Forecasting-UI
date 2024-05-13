@@ -12,6 +12,19 @@ import Sidebar from "../Utils/Sidebar";
 import Insight from "../Components/NewsComponent";
 import ChartComponent from "../Components/ChartsComponent";
 import { useCommodity } from "../Context/forecastContext";
+import CryptoJS from "crypto-js";
+
+const decryptData = (encryptedData, secretKey,setError) => {
+  try {
+    const cleanedEncryptedData = encryptedData.replace(/\s/g, "+");
+    const bytes = CryptoJS.AES.decrypt(cleanedEncryptedData, secretKey);
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(decryptedData);
+  } catch (error) {
+    setError("Error decrypting data");
+  }
+};
+
 
 const Home = () => {
   const [clickedIcon, setClickedIcon] = useState("Overview");
@@ -29,15 +42,18 @@ const Home = () => {
     const mainDomain = `${process.env.REACT_APP_MAIN_DOMAIN}`;
     setMainDomain(mainDomain);
     if (document.referrer.startsWith(mainDomain)) {
+      const params = new URLSearchParams(window.location.search);
+      const encryptedData = decodeURIComponent(params.get("data"));
+      const secretKey = process.env.REACT_APP_SECRET_KEY;
+      const decryptedData = decryptData(encryptedData.toString(), secretKey,setError);
+      const clientEmail = decryptedData.email;
+      const fetchUrl = `${
+        process.env.REACT_APP_URL
+      }?userId=${encodeURIComponent(clientEmail)}`;
+
       const fetchData = async () => {
         try {
-          const params = new URLSearchParams(window.location.search);
-          const email = params.get("email");
-          const response = await fetch(
-            `${process.env.REACT_APP_URL}?userId=${email}`
-          );
-
-
+          const response = await fetch(fetchUrl);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -110,11 +126,6 @@ const Home = () => {
               value={selectedCommodity}
               onChange={handleCommodityChange}
             >
-              {forecastingCommodities.map((commodity, index) => (
-                <MenuItem key={index} value={commodity}>
-                  {commodity}
-                </MenuItem>
-              ))}
               {forecastingCommodities.map((commodity, index) => (
                 <MenuItem key={index} value={commodity}>
                   {commodity}

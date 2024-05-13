@@ -5,7 +5,6 @@ import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import logo from '../Images/black-20.jpg'
-
 const Sidebar = ({ clickedIcon, setClickedIcon }) => {
   return (
     <Grid
