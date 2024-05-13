@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const mainDomain = `${process.env.REACT_APP_MAIN_DOMAIN}`;
+    const mainDomain = `${process.env.REACT_APP_HOME}`;
     setMainDomain(mainDomain);
     if (document.referrer.startsWith(mainDomain)) {
       const params = new URLSearchParams(window.location.search);
@@ -47,9 +47,7 @@ const Home = () => {
       const secretKey = process.env.REACT_APP_SECRET_KEY;
       const decryptedData = decryptData(encryptedData.toString(), secretKey,setError);
       const clientEmail = decryptedData.email;
-      const fetchUrl = `${
-        process.env.REACT_APP_BACKEND_ENGINE
-      }?userId=${encodeURIComponent(clientEmail)}`;
+      const fetchUrl = `${process.env.REACT_APP_BACKEND_ENGINE}/get_user?userId=${encodeURIComponent(clientEmail)}`;
 
       const fetchData = async () => {
         try {
