@@ -5,7 +5,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Header = () => {
   const handleHomeClick = () => {
-    window.location.href = process.env.REACT_APP_DASHBOARD;
+    window.location.href = `${process.env.REACT_APP_HOME}/dashboard`;
   };
 
   return (

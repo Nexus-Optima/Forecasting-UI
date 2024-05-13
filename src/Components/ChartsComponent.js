@@ -27,7 +27,7 @@ const ChartComponent = () => {
       }
       chartContainerRef.current.innerHTML = "";
       try {
-        const apiUrl = process.env.REACT_APP_BACKEND;
+        const apiUrl = process.env.REACT_APP_FORECAST_MANAGER;
         const response = await fetch(
           `${apiUrl}/get-forecast/${selectedCommodity}`
         );
