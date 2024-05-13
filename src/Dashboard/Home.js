@@ -70,7 +70,6 @@ const Home = () => {
           setError("Error fetching data. Please try again later.");
         }
       };
-
       fetchData();
     } else {
       setUnauthorized("Unauthorized - Access denied.");

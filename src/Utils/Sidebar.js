@@ -3,8 +3,8 @@ import { Grid, Button, Typography, Box } from '@mui/material';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-
-
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import logo from '../Images/black-20.jpg'
 const Sidebar = ({ clickedIcon, setClickedIcon }) => {
   return (
     <Grid
@@ -18,17 +18,15 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
         justifyContent: 'space-between',
       }}
     >
-      <Typography
-        variant="body1"
+      <img
+        src={logo}
+        alt="Logo"
         style={{
-          color: 'black',
           padding: '0 2% 20% 20%',
-          marginRight: '60px',
-          fontSize: '15px',
+          width: '100px', // Adjust width as needed
+          height: '90px', // Adjust height as needed
         }}
-      >
-        ABC Symbol
-      </Typography>
+      />
 
       <Box style={{ paddingLeft: '20px', paddingBottom: '40%' }}>
         <Button
