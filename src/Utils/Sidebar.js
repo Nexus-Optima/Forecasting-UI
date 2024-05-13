@@ -3,7 +3,7 @@ import { Grid, Button, Typography, Box } from '@mui/material';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
+
 
 const Sidebar = ({ clickedIcon, setClickedIcon }) => {
   return (
