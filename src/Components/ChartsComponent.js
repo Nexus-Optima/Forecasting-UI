@@ -172,16 +172,16 @@ const ChartComponent = () => {
            3 Months Summary
           </Typography>
           <Typography sx={{ color: "black", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}>
-            {actualmaxprice ? `Max Price: ${actualmaxprice}` : 'Max Price : No data available'}
+            {actualmaxprice ? `Max Price: ${actualmaxprice.toFixed(2)}` : 'Max Price : No data available'}
           </Typography>
           <Typography sx={{ color: "black", fontSize: "18px", marginBottom: "10px", marginRight:'20px' ,fontStyle:'italic'}}>
-            {actualminprice ? `Min Price: ${actualminprice}` : 'Min Price : No data available'}
+            {actualminprice ? `Min Price: ${actualminprice.toFixed(2)}` : 'Min Price : No data available'}
           </Typography>
           <Typography sx={{ color: "black", fontSize: "18px", marginBottom: "10px", marginRight:'20px',fontStyle:'italic' }}>
             {actualstartdate && actualenddate ? `Date Range: ${actualstartdate} - ${actualenddate}` : 'Date Range : No data available'} 
           </Typography>
           <Typography sx={{ color: "black", fontSize: "18px", marginBottom: "10px", marginRight:'20px',fontStyle:'italic' }}>
-            {actualavgprice ? `Avg Price: ${actualavgprice}` : 'Avg Price : No data available'}
+            {actualavgprice ? `Avg Price: ${actualavgprice.toFixed(2)}` : 'Avg Price : No data available'}
           </Typography>
         </Box>
       </Grid>
@@ -215,12 +215,12 @@ const ChartComponent = () => {
           <Typography
             sx={{ color: "green", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
           >
-            {maxPrice ? `Max Price: ${maxPrice}` : 'Max Price : No data available'}
+            {maxPrice ? `Max Price: ${maxPrice.toFixed(2)}` : 'Max Price : No data available'}
           </Typography>
           <Typography
             sx={{ color: "green", fontSize: "18px", marginBottom: "10px" , marginRight:'20px', fontStyle:'italic'}}
           >
-            {minPrice ? `Min Price: ${minPrice}` : 'Min Price : No data available'}
+            {minPrice ? `Min Price: ${minPrice.toFixed(2)}` : 'Min Price : No data available'}
           </Typography>
           <Typography
             sx={{ color: "green", fontSize: "18px", marginBottom: "10px", marginRight:'20px', fontStyle:'italic' }}
@@ -228,7 +228,7 @@ const ChartComponent = () => {
             {startDate && endDate ? `Date Range: ${startDate} - ${endDate}` : 'Date Range : No data available'}
           </Typography>
           <Typography sx={{ color: "green", fontSize: "18px" , marginRight:'20px', fontStyle:'italic'}}>
-            {avgPrice ? `Avg Price: ${avgPrice}` : 'Avg Price : No data available'}
+            {avgPrice ? `Avg Price: ${avgPrice.toFixed(2)}` : 'Avg Price : No data available'}
           </Typography>
         </Box>
       </Grid>
