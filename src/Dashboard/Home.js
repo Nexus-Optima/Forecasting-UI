@@ -110,18 +110,19 @@ const Home = () => {
           <FormControl
             sx={{
               position: "absolute",
-              top: "10px",
+              top: "2%",
               left: "40%",
               width: "20%",
             }}
           >
-            <InputLabel sx={{ textAlign: "center" }} id="commodity-label">
+            <InputLabel id="commodity-label">
               SELECT COMMODITY
             </InputLabel>
             <Select
               labelId="commodity-label"
               id="commodity"
               value={selectedCommodity}
+              label="SELECT COMMODITY"
               onChange={handleCommodityChange}
             >
               {forecastingCommodities.map((commodity, index) => (
