@@ -24,7 +24,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
         style={{
           padding: '0 1% 30%',
           width: '200px', // Adjust width as needed
-          height: '90px', // Adjust height as needed
+          height: '100px', // Adjust height as needed
         }}
       />
 
@@ -98,7 +98,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
           Historical Analysis
         </Button> */}
       </Box>
-      <Box sx={{ paddingLeft: '5%', paddingTop: '200%' }}>
+      <Box sx={{ paddingLeft: '5%', marginTop:'100%' }}>
         <Button
           onClick={() => setClickedIcon('help')}
           style={{
