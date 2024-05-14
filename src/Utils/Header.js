@@ -14,13 +14,15 @@ const Header = () => {
         style={{
           display: "flex",
           justifyContent: "flex-end",
+          marginTop:'1%',
+          marginRight:'2%'
         }}
       >
         <Box sx={{ padding: "0 10px" }} onClick={handleHomeClick}>
-          <HomeIcon sx={{ fontSize: 60 }} />
+          <HomeIcon sx={{ fontSize: 40 }} />
         </Box>
-        <Box sx={{ padding: "0 10px" }}>
-          <NotificationsIcon sx={{ fontSize: 60 }} />
+        <Box sx={{ padding: "0 10px"}}>
+          <NotificationsIcon sx={{ fontSize: 40 }} />
         </Box>
       </Box>
     </>

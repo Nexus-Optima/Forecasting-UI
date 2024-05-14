@@ -4,7 +4,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import logo from '../Images/black-20.jpg'
+import logo from '../Images/abc_image.png'
 const Sidebar = ({ clickedIcon, setClickedIcon }) => {
   return (
     <Grid
@@ -12,7 +12,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
       xs={2}
       style={{
         position: 'fixed',
-        top: '20px',
+        top: '0',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -22,13 +22,13 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
         src={logo}
         alt="Logo"
         style={{
-          padding: '0 2% 20% 20%',
-          width: '100px', // Adjust width as needed
+          padding: '0 1% 30%',
+          width: '200px', // Adjust width as needed
           height: '90px', // Adjust height as needed
         }}
       />
 
-      <Box style={{ paddingLeft: '20px', paddingBottom: '40%' }}>
+      <Box style={{ paddingLeft: '5%', paddingBottom: '40%' }}>
         <Button
           onClick={() => setClickedIcon('summary')}
           style={{
@@ -36,7 +36,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
             alignItems: 'center',
             flexDirection: 'column',
             justifyContent: 'flex-start',
-            padding: '12px',
+            padding: '10%',
             width: '60%',
             textTransform: 'none',
             fontSize: '15px',
@@ -98,7 +98,7 @@ const Sidebar = ({ clickedIcon, setClickedIcon }) => {
           Historical Analysis
         </Button> */}
       </Box>
-      <Box sx={{ paddingLeft: '20px', paddingTop: '80px' }}>
+      <Box sx={{ paddingLeft: '5%', paddingTop: '200%' }}>
         <Button
           onClick={() => setClickedIcon('help')}
           style={{
