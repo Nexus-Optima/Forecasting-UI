@@ -12,67 +12,16 @@ import Sidebar from "../Utils/Sidebar";
 import Insight from "../Components/NewsComponent";
 import ChartComponent from "../Components/ChartsComponent";
 import { useCommodity } from "../Context/forecastContext";
-import CryptoJS from "crypto-js";
-
-const decryptData = (encryptedData, secretKey,setError) => {
-  try {
-    const cleanedEncryptedData = encryptedData.replace(/\s/g, "+");
-    const bytes = CryptoJS.AES.decrypt(cleanedEncryptedData, secretKey);
-    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-    return JSON.parse(decryptedData);
-  } catch (error) {
-    setError("Error decrypting data");
-  }
-};
 
 
 const Home = () => {
   const [clickedIcon, setClickedIcon] = useState("Overview");
-  const { selectedCommodity, setSelectedCommodity } = useCommodity();
-  const [forecastingCommodities, setForecastingCommodities] = useState([]);
-  const [error, setError] = useState(null);
-  const [unauthorized, setUnauthorized] = useState(null);
-  const [mainDomain, setMainDomain] = useState(null);
+  const { selectedCommodity, setSelectedCommodity, forecastingCommodities, error, setError, unauthorized, setUnauthorized, mainDomain } = useCommodity();
+
 
   const handleCommodityChange = (e) => {
     setSelectedCommodity(e.target.value);
   };
-
-  useEffect(() => {
-    const mainDomain = `${process.env.REACT_APP_HOME}`;
-    setMainDomain(mainDomain);
-    if (document.referrer.startsWith(mainDomain)) {
-      const params = new URLSearchParams(window.location.search);
-      const encryptedData = decodeURIComponent(params.get("data"));
-      const secretKey = process.env.REACT_APP_SECRET_KEY;
-      const decryptedData = decryptData(encryptedData.toString(), secretKey,setError);
-      const clientEmail = decryptedData.email;
-      const fetchUrl = `${process.env.REACT_APP_BACKEND_ENGINE}/get_user?userId=${encodeURIComponent(clientEmail)}`;
-
-      const fetchData = async () => {
-        try {
-          const response = await fetch(fetchUrl);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const data = await response.json();
-          const extractedCommodities = [];
-          for (const key in data) {
-            if (data[key].moduleName.includes("forecasting")) {
-              const commodity = key.split("#").pop();
-              extractedCommodities.push(commodity);
-            }
-          }
-          setForecastingCommodities(extractedCommodities);
-        } catch (error) {
-          setError("Error fetching data. Please try again later.");
-        }
-      };
-      fetchData();
-    } else {
-      setUnauthorized("Unauthorized - Access denied.");
-    }
-  }, []);
 
   const renderContent = () => {
     switch (clickedIcon) {
