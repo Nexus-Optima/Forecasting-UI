@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import { Container, Grid, TableBody } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useCommodity } from "../Context/forecastContext";
 
 const Insight = () => {
-  const { selectedCommodity, setSelectedCommodity } = useCommodity();
+  const { selectedCommodity } = useCommodity();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,6 +37,7 @@ const Insight = () => {
       }
     };
     fetchData();
+    setSelectedNews(null)
   }, [selectedCommodity]);
 
   const handleChangePage = (newPage) => {
@@ -137,26 +138,20 @@ const Insight = () => {
                 padding: 16,
                 width: "80%",
                 height: "70%",
-                left: "50%",
                 position: "absolute",
                 top: "15%",
                 left: "12%",
-                paddingTop: "1%",
                 background: "#F0F0F0",
-                overflow: "auto",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <Typography
                 variant="h6"
                 sx={{
                   fontStyle: "inherit",
-                  position: "absolute",
-                  justifyContent: "left",
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
                   fontWeight: "bold",
-                  margin: "auto",
-                  left: "0",
-                  right: "0",
                   textDecoration: "underline",
                   marginBottom: "4%",
                 }}
@@ -165,39 +160,35 @@ const Insight = () => {
               </Typography>
               <Typography
                 sx={{
-                  margin: "10% 0 0 0",
+                  flexGrow: 1,
                   fontWeight: "400",
                   fontSize: "1rem",
                   fontStyle: "inherit",
-                  position: "relative",
-                  padding: "1%",
-                  left: " 1%",
-                  height: "auto",
+                  overflowY: "auto",
                   border: "1px solid black",
-                  width: "95.5%",
-                  textAlign: "start",
+                  padding: "1%",
                 }}
               >
                 {selectedNews.description}
               </Typography>
-              <Button
-                onClick={handleBackClick}
-                style={{
-                  cursor: "pointer",
-                  color: "white",
-                  position: "fixed",
-                  marginBottom: "1%",
-                  background: "black",
-                  padding: "1%",
-                  width: "10%",
-                  bottom: "0",
-                  left: "46%",
-                  right: "0%",
-                }}
-              >
-                Back
-              </Button>
             </Paper>
+            <Button
+              onClick={handleBackClick}
+              style={{
+                cursor: "pointer",
+                color: "white",
+                background: "black",
+                padding: "1%",
+                width: "10%",
+                position: "fixed",
+                bottom: "1%",
+                left: "46%",
+                right: "0%",
+                zIndex: 1000,
+              }}
+            >
+              Back
+            </Button>
           </Box>
         )}
       </Container>
