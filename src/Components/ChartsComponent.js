@@ -34,10 +34,9 @@ const ChartComponent = () => {
       try {
         const apiUrl = process.env.REACT_APP_FORECAST_MANAGER;
         const response = await fetch(
-          `${apiUrl}/get-forecast/${selectedCommodity}/micro`
+          `${apiUrl}/get-forecast/${selectedCommodity}`
         );
         const { actual, forecast, predictions } = await response.json();
-        console.log(isPredict)  
         const last90DaysData = actual.slice(-90);
         const actualPrices = last90DaysData.map((e) => e["Actual Values"]);
         const actualmaxprice = Math.max(...actualPrices);
