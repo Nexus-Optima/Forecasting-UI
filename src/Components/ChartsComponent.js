@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Grid, Box, Typography } from "@mui/material";
-import { createChart, ColorType } from "lightweight-charts";
+import { Grid, Box, Typography, AppBar, Toolbar, FormControlLabel, Switch, Stack } from "@mui/material";
+import { createChart, ColorType, LineStyle } from "lightweight-charts";
 import { useCommodity } from "../Context/forecastContext";
+import { styled } from '@mui/material/styles';
 
 const ChartComponent = () => {
   const { selectedCommodity } = useCommodity();
@@ -12,12 +13,16 @@ const ChartComponent = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [avgPrice, setAvgPrice] = useState(null);
-
   const [actualmaxprice, setActualmaxprice] = useState(null);
   const [actualminprice, setActualminprice] = useState(null);
   const [actualavgprice, setActualavgprice] = useState(null);
   const [actualstartdate, setActualstartdate] = useState(null);
   const [actualenddate, setActualenddate] = useState(null);
+  const [isMacro, setIsMacro] = useState(false);
+  const [isPredict, setIsPredict] = useState(false);
+
+  const handleToggle = () => { setIsMacro(!isMacro);};
+  const handlePredictToggle = () => { setIsPredict(!isPredict);};
 
   useEffect(() => {
     const forecastdata = async () => {
@@ -28,10 +33,18 @@ const ChartComponent = () => {
       chartContainerRef.current.innerHTML = "";
       try {
         const apiUrl = process.env.REACT_APP_FORECAST_MANAGER;
-        const response = await fetch(
-          `${apiUrl}/get-forecast/${selectedCommodity}`
-        );
-        const { actual, forecast } = await response.json();
+        let response = ''
+        if (isMacro) {
+          response = await fetch(
+            `${apiUrl}/get-forecast/${selectedCommodity}/macro`
+          );
+        }
+        else {
+          response = await fetch(
+            `${apiUrl}/get-forecast/${selectedCommodity}/micro`
+          );
+        }
+        const { actual, forecast, predictions } = await response.json();
 
         const last90DaysData = actual.slice(-90);
         const actualPrices = last90DaysData.map((e) => e["Actual Values"]);
@@ -69,7 +82,6 @@ const ChartComponent = () => {
           .slice(startIndex, endIndex + 1)
           .map((entry) => parseFloat(entry["Forecast Values"]));
 
-        // Check if pricesInRange is not empty to avoid NaN result
         const avgPrice =
           pricesInRange.length > 0
             ? pricesInRange.reduce((acc, val) => acc + val, 0) /
@@ -82,8 +94,8 @@ const ChartComponent = () => {
           layout: {
             background: { type: ColorType.Solid, color: "white" },
           },
-          width: chartContainerRef.current.clientWidth * 0.95,
-          height: chartContainerRef.current.clientHeight * 0.95,
+          width: chartContainerRef.current.clientWidth,
+          height: chartContainerRef.current.clientHeight - 60, // Adjusted to fit within the box
         });
 
         const actualSeries = chart.addLineSeries({
@@ -94,11 +106,16 @@ const ChartComponent = () => {
           color: "green",
         });
 
+        const predictionSeries = chart.addLineSeries({
+          color: "blue",
+          lineStyle: LineStyle.Dotted,
+        });
+
         const processData = (data) => {
           let processedData = data.map((entry) => ({
             time: entry.Date,
             value: parseFloat(
-              entry["Actual Values"] || entry["Forecast Values"]
+              entry["Actual Values"] || entry["Forecast Values"] || entry["Test Predictions"]
             ),
           }));
           processedData = processedData.sort((a, b) => a.time - b.time);
@@ -109,6 +126,7 @@ const ChartComponent = () => {
 
         actualSeries.setData(processData(actual));
         forecastSeries.setData(processData(forecast));
+        if (isPredict){ predictionSeries.setData(processData(predictions));}
 
         chartRef.current = chart;
       } catch (error) {
@@ -118,13 +136,12 @@ const ChartComponent = () => {
 
     forecastdata();
 
-    // Resize observer to update chart dimensions on container resize
     const resizeObserver = new ResizeObserver((entries) => {
       if (chartRef.current && entries[0].target) {
         const { width, height } = entries[0].target.getBoundingClientRect();
         chartRef.current.applyOptions({
-          width: width * 0.95,
-          height: height * 0.95,
+          width: width,
+          height: height - 60, // Adjusted to fit within the box
         });
       }
     });
@@ -142,7 +159,57 @@ const ChartComponent = () => {
         resizeObserver.unobserve(chartContainerRef.current);
       }
     };
-  }, [selectedCommodity]);
+  }, [selectedCommodity, isMacro, isPredict]);
+
+  const AntSwitch = styled(Switch)(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    display: 'flex',
+    '&:active': {
+      '& .MuiSwitch-thumb': {
+        width: 22,
+      },
+      '& .MuiSwitch-switchBase.Mui-checked': {
+        transform: 'translateX(16px)',
+      },
+    },
+    '& .MuiSwitch-switchBase': {
+      padding: 4,
+      '&.Mui-checked': {
+        transform: 'translateX(16px)',
+        color: '#000',
+        '& + .MuiSwitch-track': {
+          opacity: 1,
+          backgroundColor: '#ffffff',
+        },
+      },
+      '&.MuiSwitch-switchBase': {
+        color: '#000',
+        '& + .MuiSwitch-track': {
+          opacity: 1,
+          backgroundColor: '#ffffff',
+        },
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
+      width: 18,
+      height: 18,
+      borderRadius: '50%', // Make the thumb round
+      backgroundColor: '#000',
+      transition: theme.transitions.create(['width'], {
+        duration: 200,
+      }),
+    },
+    '& .MuiSwitch-track': {
+      borderRadius: 26 / 2,
+      opacity: 1,
+      backgroundColor:
+        theme.palette.mode === 'dark' ? '#ffffff' : '#ffffff',
+      boxSizing: 'border-box',
+    },
+  }));
 
   return (
     <Grid container spacing={2}>
@@ -236,7 +303,7 @@ const ChartComponent = () => {
         <Box
           sx={{
             width: "86%",
-            height: "480px",
+            height: "57%",
             color: "white",
             align: "center",
             justify: "center",
@@ -249,12 +316,26 @@ const ChartComponent = () => {
             borderRadius: "50px",
           }}
         >
+          <AppBar position="static" sx={{ borderRadius: "50px 50px 0 0", backgroundColor: 'black' }}>
+            <Toolbar>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              </Typography>
+              <FormControlLabel
+                control={<AntSwitch checked={isMacro} onChange={handleToggle} />}
+                label={<Typography sx={{ color: "white", marginLeft: '12px' }}>{isMacro ? 'Macro' : 'Micro'}</Typography>}
+              />
+              <FormControlLabel 
+                control={<AntSwitch checked={isPredict} onChange={handlePredictToggle} />} 
+                label={<Typography sx={{ color: "white", marginLeft: '12px' }}>{isPredict ? 'Hide predictions' : 'Show predictions'}</Typography>} 
+              />
+            </Toolbar>
+          </AppBar>
           <div
             ref={chartContainerRef}
             style={{
               width: "97%",
-              height: "80%",
-              padding: "2%", // Adds padding inside the div to prevent the chart from touching the edges
+              height: "93%",
+              margin:'1%',
             }}
           ></div>
         </Box>
