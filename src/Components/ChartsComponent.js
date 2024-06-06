@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Grid, Box, Typography } from "@mui/material";
-import { createChart, ColorType } from "lightweight-charts";
+import { Grid, Box, Typography, FormControlLabel, Stack, Switch } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { createChart, ColorType, LineStyle } from "lightweight-charts";
 import { useCommodity } from "../Context/forecastContext";
 
 const ChartComponent = () => {
@@ -12,12 +13,16 @@ const ChartComponent = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [avgPrice, setAvgPrice] = useState(null);
+  const [isPredict, setIsPredict] = useState(false);
 
   const [actualmaxprice, setActualmaxprice] = useState(null);
   const [actualminprice, setActualminprice] = useState(null);
   const [actualavgprice, setActualavgprice] = useState(null);
   const [actualstartdate, setActualstartdate] = useState(null);
   const [actualenddate, setActualenddate] = useState(null);
+  const handleToggle = () => {
+    setIsPredict(!isPredict);
+  };
 
   useEffect(() => {
     const forecastdata = async () => {
@@ -31,8 +36,7 @@ const ChartComponent = () => {
         const response = await fetch(
           `${apiUrl}/get-forecast/${selectedCommodity}`
         );
-        const { actual, forecast } = await response.json();
-
+        const { actual, forecast, predictions } = await response.json();
         const last90DaysData = actual.slice(-90);
         const actualPrices = last90DaysData.map((e) => e["Actual Values"]);
         const actualmaxprice = Math.max(...actualPrices);
@@ -94,11 +98,16 @@ const ChartComponent = () => {
           color: "green",
         });
 
+        const predictionSeries = chart.addLineSeries({
+          color: "blue",
+          lineStyle: LineStyle.Dotted,
+        });
+
         const processData = (data) => {
           let processedData = data.map((entry) => ({
             time: entry.Date,
             value: parseFloat(
-              entry["Actual Values"] || entry["Forecast Values"]
+              entry["Actual Values"] || entry["Forecast Values"] || entry["Test Predictions"]
             ),
           }));
           processedData = processedData.sort((a, b) => a.time - b.time);
@@ -109,6 +118,9 @@ const ChartComponent = () => {
 
         actualSeries.setData(processData(actual));
         forecastSeries.setData(processData(forecast));
+        if (isPredict){
+          predictionSeries.setData(processData(predictions));
+        }
 
         chartRef.current = chart;
       } catch (error) {
@@ -142,9 +154,9 @@ const ChartComponent = () => {
         resizeObserver.unobserve(chartContainerRef.current);
       }
     };
-  }, [selectedCommodity]);
+  }, [selectedCommodity, isPredict]);
 
-  return (
+  return (  
     <Grid container spacing={2}>
       <Grid item xs={5}>
         <Box
@@ -257,6 +269,8 @@ const ChartComponent = () => {
               padding: "2%", // Adds padding inside the div to prevent the chart from touching the edges
             }}
           ></div>
+          <FormControlLabel control={<Switch checked={isPredict} onChange={handleToggle} color="primary" />}
+           label={<Typography sx={{color: "black"}}>{isPredict ? 'Hide predictions' : 'Show predictions'}</Typography>} />
         </Box>
       </Grid>
     </Grid>
